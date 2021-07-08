@@ -23,20 +23,20 @@ export default function(){
    const [users,setUsers] = useState<User[]>([])
    const [projects,setProjects] = useState<Project[]>([])
    useEffect(() => {
-       fetch('http://localhost:3001/users').then(async(res) => {
+       fetch(`${process.env.REACT_APP_API_URL}/users`).then(async(res) => {
            if (res.ok){
                setUsers(await res.json())
            }
        })
    },[])
    useEffect(() => {
-      fetch(`http://localhost:3001/projects?${qs.stringify(deleteInvalidParams(params))}`).then(async(res) => {
+      fetch(`${process.env.REACT_APP_API_URL}/projects?${qs.stringify(deleteInvalidParams(params))}`).then(async(res) => {
           if (res.ok) {
               setProjects(await res.json())
           }
       })
    },[useDebounce(params)])
-   return <div style={{ marginTop:'20px' }}>
+   return <div>
       <Search params={params} setParams={setParams} users={users}/>
       <Table users={users} projects={projects}/>
    </div>

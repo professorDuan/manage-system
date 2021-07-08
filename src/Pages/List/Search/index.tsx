@@ -10,7 +10,7 @@ interface DataFormat {
 }
 
 export default ({params,users,setParams}:DataFormat) => {
-    return <Form labelCol={{ span: 8 }} wrapperCol={{ span: 16 }} layout='inline'>
+    return <Form style={{ marginTop:20,display:'flex',justifyContent:'center' }} labelCol={{ span: 8 }} wrapperCol={{ span: 20 }} layout='inline'>
        <Form.Item name='name' label="部门">
           <Input placeholder="请输入部门名" value={params.name} onChange={e => setParams({...params,name:e.target.value})}/>
        </Form.Item>

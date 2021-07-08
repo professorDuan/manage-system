@@ -1,9 +1,6 @@
 import List from './Pages/List'
+import Login from './Pages/Login'
 
 export default function App() {
-  return (
-    <div style={{ display:'flex',flexDirection:'row',justifyContent:'center' }}>
-       <List/>
-    </div>
-  )
+  return <Login/>
 }

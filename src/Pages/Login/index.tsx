@@ -1,24 +1,29 @@
-import { Form, Input,Button } from 'antd'
+import { Form, Input,Button,message } from 'antd'
 import { useCallback } from 'react'
+import { useHistory } from 'react-router'
+import { Link } from 'react-router-dom'
+import { UseAuth } from '../../custom-hooks/use-auth'
 
-type FormValues = {
+export type FormValues = {
     username:string
     password:string
 }
+interface DataFormat{
+    location:{state:{from:string}}
+}
 
-export default () => {
+export default ({location}:DataFormat) => {
+    const {push} = useHistory()
+    const {login} = UseAuth()
     const submit = useCallback((vals:FormValues) => {
-       fetch(`${process.env.REACT_APP_API_URL}/login`,{
-           method:'POST',
-           headers:{
-               "Content-Type":"application/json"
-           },
-           body:JSON.stringify(vals)
-       }).then(async res => {
-           console.log(await res.json())
+       login(vals).then(res => {
+          if (res.success) {
+            push((location.state&&location.state.from)?location.state.from:'/')
+            return
+          }
+          else message.error('账号或者密码错误')
        })
     },[])
-
     return <Form
         style={{ margin:'20px auto' }}
         name="basic"
@@ -43,7 +48,8 @@ export default () => {
         </Form.Item>
 
         <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
-          <Button type="primary" htmlType="submit">提交</Button>
+          <Button type="primary" htmlType="submit">登录</Button>
+          <Link to='/register' style={{ marginLeft:20 }}>还没有账号？快去注册吧</Link>
         </Form.Item>
     </Form>
 }

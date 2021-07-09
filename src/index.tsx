@@ -1,8 +1,11 @@
 import ReactDOM from 'react-dom'
 import App from './App'
+import { AuthProvider } from './custom-hooks/use-auth'
 import 'antd/dist/antd.css'
+import {loadDevTools} from 'jira-dev-tool'
 
-ReactDOM.render(
-  <App/>,
-  document.getElementById('root')
-)
+loadDevTools(() => { ReactDOM.render(
+    <AuthProvider><App/></AuthProvider>,
+    document.getElementById('root')
+  )
+})

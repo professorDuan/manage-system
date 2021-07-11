@@ -1,8 +1,8 @@
 import Search from './Search'
 import Table from './Table'
 import { useState,useEffect } from 'react'
-import qs from 'qs'
 import { UseAuth } from '../../custom-hooks/use-auth'
+import UseHttp from '../../custom-hooks/use-http'
 import {deleteInvalidParams} from '../../util'
 import { useHistory } from 'react-router'
 import { Redirect } from 'react-router-dom'
@@ -30,19 +30,12 @@ export default function(){
    const [params,setParams] = useState({personId:0,name:''})
    const [users,setUsers] = useState<User[]>([])
    const [projects,setProjects] = useState<Project[]>([])
+   const http = UseHttp()
    useEffect(() => {
-       fetch(`${process.env.REACT_APP_API_URL}/users`).then(async(res) => {
-           if (res.ok){
-               setUsers(await res.json())
-           }
-       })
+       http('users',{}).then(setUsers)
    },[])
    useEffect(() => {
-      fetch(`${process.env.REACT_APP_API_URL}/projects?${qs.stringify(deleteInvalidParams(params))}`).then(async(res) => {
-          if (res.ok) {
-              setProjects(await res.json())
-          }
-      })
+       http('projects',{data:deleteInvalidParams(params)}).then(setProjects)
    },[useDebounce(params)])
    return <div>
       <Search params={params} setParams={setParams} users={users}/>

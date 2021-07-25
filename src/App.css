@@ -1,0 +1,9 @@
+html {
+    /*浏览器默认字体大小16px,62.5%就是10px*/
+    font-size: 62.5%;
+}
+
+html body #root .App {
+    /*占满整个视口*/
+    min-height: 100vh;
+}

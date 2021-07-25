@@ -1,4 +1,5 @@
-import { Form, Input,Button,message } from 'antd'
+import { Form, Input,message, Divider } from 'antd'
+import { Container,Title,ShadowCard,Header,BackGround,LongBtn } from '../common-style/loginAndRegisterStyles'
 import { useCallback } from 'react'
 import { useHistory } from 'react-router'
 import { Link } from 'react-router-dom'
@@ -24,32 +25,36 @@ export default ({location}:DataFormat) => {
           else message.error('账号或者密码错误')
        })
     },[])
-    return <Form
-        style={{ margin:'20px auto' }}
-        name="basic"
-        labelCol={{ span: 8 }}
-        wrapperCol={{ span: 8 }}
-        onFinish={submit}
-    >
-        <Form.Item
-          label="账号"
-          name="username"
-          rules={[{ required: true, message: '请输入账号' }]}
+    return <Container>
+      <Header/>
+      <BackGround/>
+      <ShadowCard>
+        <Title>请登录</Title>
+        <Form
+          name="basic"
+          labelCol={{ span: 24 }}
+          wrapperCol={{ span: 24 }}
+          onFinish={submit}
         >
-          <Input />
-        </Form.Item>
+          <Form.Item
+            name="username"
+            rules={[{ required: true, message: '请输入账号' }]}
+          >
+            <Input placeholder='账号'/>
+          </Form.Item>
 
-        <Form.Item
-          label="密码"
-          name="password"
-          rules={[{ required: true, message: '请输入密码' }]}
-        >
-          <Input.Password />
-        </Form.Item>
-
-        <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
-          <Button type="primary" htmlType="submit">登录</Button>
-          <Link to='/register' style={{ marginLeft:20 }}>还没有账号？快去注册吧</Link>
-        </Form.Item>
-    </Form>
+          <Form.Item
+            name="password"
+            rules={[{ required: true, message: '请输入密码' }]}
+          >
+            <Input.Password placeholder='密码'/>
+          </Form.Item>
+          <Form.Item>
+            <LongBtn type="primary" htmlType="submit">登录</LongBtn>
+            <Divider/>
+            <Link to='/register'>还没有账号？快去注册吧</Link>
+          </Form.Item>
+        </Form>
+      </ShadowCard>
+    </Container>
 }

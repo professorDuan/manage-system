@@ -1,9 +1,14 @@
-import { Table } from 'antd'
+import { Table, TableProps } from 'antd'
 import { User,Project } from '../index'
 import DayJs from 'dayjs'
+import { memo } from 'react'
 
-export default ({users,projects}:{users:User[],projects:Project[]}) => {
-    return <Table style={{ marginTop: '2rem' }} bordered={true} pagination={false} dataSource={projects} columns={[
+interface DataFormat extends TableProps<Project>{
+    users:User[]
+}
+
+export default memo(({users,...params}:DataFormat) => {
+    return <Table style={{ marginTop: '2rem' }} columns={[
         {
             title:'名称',dataIndex:'name',key:'name'
         },
@@ -16,5 +21,5 @@ export default ({users,projects}:{users:User[],projects:Project[]}) => {
         {
             title:'负责人',dataIndex:'personId',key:'id',render:id => (users.find((user:User) => user.id===Number(id)))?.name
         }
-    ]}/>
-}
+    ]} {...params}/>
+})

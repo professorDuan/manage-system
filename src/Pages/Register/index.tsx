@@ -57,7 +57,7 @@ export default () => {
           <Form.Item>
             <LongBtn type="primary" htmlType="submit">注册</LongBtn>
             <Divider/>
-            <Link to='/login' style={{ marginLeft:10 }}>已有账号了？请登录</Link>
+            <Link to='/login'>已有账号了？请登录</Link>
           </Form.Item>
         </Form>
       </ShadowCard>

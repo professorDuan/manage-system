@@ -1,4 +1,4 @@
-import { Form, Input,message, Divider } from 'antd'
+import { Form, Input,Button,message, Divider } from 'antd'
 import { Container,Title,ShadowCard,Header,BackGround,LongBtn } from '../common-style/loginAndRegisterStyles'
 import { useCallback } from 'react'
 import { useHistory } from 'react-router'
@@ -31,29 +31,32 @@ export default ({location}:DataFormat) => {
       <ShadowCard>
         <Title>请登录</Title>
         <Form
-          name="basic"
-          labelCol={{ span: 24 }}
-          wrapperCol={{ span: 24 }}
-          onFinish={submit}
+            name="basic"
+            labelCol={{ span: 24 }}
+            wrapperCol={{ span: 24 }}
+            onFinish={submit}
         >
-          <Form.Item
-            name="username"
-            rules={[{ required: true, message: '请输入账号' }]}
-          >
-            <Input placeholder='账号'/>
-          </Form.Item>
+            <Form.Item
+              label="账号"
+              name="username"
+              rules={[{ required: true, message: '请输入账号' }]}
+            >
+              <Input />
+            </Form.Item>
 
-          <Form.Item
-            name="password"
-            rules={[{ required: true, message: '请输入密码' }]}
-          >
-            <Input.Password placeholder='密码'/>
-          </Form.Item>
-          <Form.Item>
-            <LongBtn type="primary" htmlType="submit">登录</LongBtn>
-            <Divider/>
-            <Link to='/register'>还没有账号？快去注册吧</Link>
-          </Form.Item>
+            <Form.Item
+              label="密码"
+              name="password"
+              rules={[{ required: true, message: '请输入密码' }]}
+            >
+              <Input.Password />
+            </Form.Item>
+
+            <Form.Item>
+              <LongBtn type="primary" htmlType="submit">登录</LongBtn>
+              <Divider/>
+              <Link to='/register'>还没有账号？快去注册吧</Link>
+            </Form.Item>
         </Form>
       </ShadowCard>
     </Container>

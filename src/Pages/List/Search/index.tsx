@@ -1,5 +1,6 @@
 import {User} from '../index'
 import { Form, Input, Select } from 'antd'
+import { memo } from 'react'
 const { Option } = Select
 
 type Params = {personId:number,name:string}
@@ -9,7 +10,7 @@ interface DataFormat {
     users:User[]
 }
 
-export default ({params,users,setParams}:DataFormat) => {
+export default memo(({params,users,setParams}:DataFormat) => {
     return <Form labelCol={{ span: 20 }} wrapperCol={{ span: 20 }} layout='inline'>
        <Form.Item name='name' label="部门" style={{ width:"30%" }}>
           <Input placeholder="请输入部门名" value={params.name} onChange={e => setParams({...params,name:e.target.value})}/>
@@ -21,4 +22,4 @@ export default ({params,users,setParams}:DataFormat) => {
           </Select>
        </Form.Item>
     </Form>
-}
+})

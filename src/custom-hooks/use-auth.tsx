@@ -1,4 +1,4 @@
-import React,{ReactNode, useCallback} from "react"
+import React,{ReactElement, ReactNode, useCallback} from "react"
 import { useState } from "react"
 import { FormValues } from "../Pages/Login"
 import { useContext } from "react"
@@ -12,7 +12,7 @@ const AuthContext = React.createContext<{
   } | undefined
 >(undefined)
 
-export function AuthProvider({children}:{children:ReactNode}){
+export function AuthProvider({children}:{children:ReactElement}){ //ReactElement表示JSX语法
     const url = process.env.REACT_APP_API_URL
     const [name,setName] = useState<string | null>(null)
     const [token,setToken] = useState<string | undefined>(undefined)

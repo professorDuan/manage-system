@@ -1,13 +1,14 @@
 import { Form, Input,Divider,message} from 'antd'
 import { Container,Title,ShadowCard,Header,BackGround,LongBtn } from '../common-style/loginAndRegisterStyles'
 import { useCallback } from 'react'
-import { useHistory } from 'react-router'
-import { Link } from 'react-router-dom'
-import { UseAuth } from '../../custom-hooks/use-auth'
+import { Link,useNavigate } from 'react-router-dom'
+import { useAuth } from '../../custom-hooks/use-auth'
+import useDocumentTitle from '../../custom-hooks/use-documentTitle'
 
 export default () => {
-    const {register} = UseAuth()
-    const {push} = useHistory()
+    useDocumentTitle('注册')
+    const {register} = useAuth()
+    const navigate = useNavigate()
     const submit = useCallback(({username,password,repassword}:{username:string,password:string,repassword:string}) => {
         if (password !== repassword) {
             message.error('两次密码不一致')
@@ -16,7 +17,7 @@ export default () => {
         register({username,password}).then(res => {
             if(res.success){
               message.success('注册成功')
-              window.setTimeout(() => push('/login'),100)
+              window.setTimeout(() => navigate('/login'),100)
               return
             }
             else message.error('用户名已经存在')

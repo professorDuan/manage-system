@@ -2,15 +2,15 @@ import Search from './Search'
 import Table from './Table'
 import { Dropdown,Menu } from 'antd'
 import { Container,Header,HeaderLeft,Main } from './styles'
-import {ReactComponent as Logo} from '../../assets/software-logo.svg'//以SVG标签展示一个SVG文件(直接import xx from会以图片形式渲染)
+import Head from '../../components/header'
 import { useState,useEffect } from 'react'
-import { UseAuth } from '../../custom-hooks/use-auth'
-import UseHttp from '../../custom-hooks/use-http'
+import { useAuth } from '../../custom-hooks/use-auth'
+import useHttp from '../../custom-hooks/use-http'
 import useAsync from '../../custom-hooks/use-async'
-import {deleteInvalidParams} from '../../util'
-import { useHistory } from 'react-router'
-import { Redirect } from 'react-router-dom'
+import { deleteInvalidParams } from '../../util'
+import { useNavigate } from 'react-router-dom'
 import useDebounce from '../../custom-hooks/use-debounce'
+import useDocumentTitle from '../../custom-hooks/use-documentTitle'
 
 export type User = {
     id:number
@@ -26,14 +26,15 @@ export interface Project {
 }
 
 export default function(){
+   const navigate = useNavigate()
    if (!window.localStorage.getItem('token')) {
-       return <Redirect to={{ pathname:'/login',state:{from:'/list'} }} />
+      navigate('/login?from=list')
    }
-   const {push} = useHistory()
-   const {name,logout} = UseAuth()
+   useDocumentTitle('任务列表')
+   const {name,logout} = useAuth()
    const [params,setParams] = useState({personId:0,name:''})
    const [users,setUsers] = useState<User[]>([])
-   const http = UseHttp()
+   const http = useHttp()
    let {run,isLoading,data:projects} = useAsync<Project[]>()
    useEffect(() => {
        http('users',{}).then(setUsers)
@@ -43,13 +44,9 @@ export default function(){
    },[useDebounce(params)])
    return <Container>
       <Header>
-          <HeaderLeft gap={3}>
-              <Logo width={'18rem'} color={'rgb(38,132,255)'}/>
-              <h3>项目</h3>
-              <h3>用户</h3>
-          </HeaderLeft>
+          <Head/>
           <Dropdown overlay={<Menu>
-                 <Menu.Item key='logout' onClick={() => logout().then(_ => push('/login'))}>退出</Menu.Item>
+                 <Menu.Item key='logout' onClick={() => logout().then(_ => navigate('/login'))}>退出</Menu.Item>
               </Menu>}>
               <a className="ant-dropdown-link" onClick={e => e.preventDefault()}>欢迎{name}归来</a>
           </Dropdown>

@@ -4,6 +4,7 @@ import React from 'react'
 //如果一个class组件中定义了static getDerivedStateFromError()或者componentDidCatch()钩子中的任意一个或两个，他就是一个错误边界组件。
 //当抛出错误后，使用getDerivedStateFromError渲染备用UI，使用或者componentDidCatch打印错误信息。
 type fallbackRender = (error:Error|null) => React.ReactElement
+//第一个参数是组件的props，第二个参数是组件的state
 export default class ErrorBoundary extends React.Component<{children:React.ReactNode,fallbackRender:fallbackRender},{error:Error|null}>{
     state = {error:null}
     static getDerivedStateFromError(error:Error){

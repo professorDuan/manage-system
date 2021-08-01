@@ -1,4 +1,4 @@
-import React,{ReactElement, ReactNode, useCallback} from "react"
+import React,{ReactElement, useCallback} from "react"
 import { useState } from "react"
 import { FormValues } from "../Pages/Login"
 import { useContext } from "react"
@@ -57,7 +57,7 @@ export function AuthProvider({children}:{children:ReactElement}){ //ReactElement
     return <AuthContext.Provider children={children} value={{ name,token,login,register,logout }}/>
 }
 
-export function UseAuth(){
+export function useAuth(){
     const context = useContext(AuthContext)
     if (!context) throw Error('context不存在!') 
     return context

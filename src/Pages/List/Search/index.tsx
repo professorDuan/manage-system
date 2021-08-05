@@ -1,7 +1,7 @@
 import {User} from '../index'
-import { Form, Input, Select } from 'antd'
+import IdSelector from '../../../components/id-selector'
+import { Form, Input } from 'antd'
 import { memo } from 'react'
-const { Option } = Select
 
 type Params = {personId:number,name:string}
 interface DataFormat {
@@ -16,10 +16,12 @@ export default memo(({params,users,setParams}:DataFormat) => {
           <Input placeholder="请输入部门名" value={params.name} onChange={e => setParams({...params,name:e.target.value})}/>
        </Form.Item>
        <Form.Item name='id' label="负责人" style={{ width:"20%" }}>
-          <Select defaultValue=""  onSelect={ val => setParams({...params,personId:Number(val)}) }>
-            <Option value="">全部</Option>
-            {users.map((user:User) => <Option key={user.id} value={user.id}>{user.name}</Option>)}
-          </Select>
+          <IdSelector 
+              defaultValue='0'
+              defaultOptionName='全部'
+              onSelect={ val => setParams({...params,personId:Number(val)}) }
+              options={users}
+          />
        </Form.Item>
     </Form>
 })

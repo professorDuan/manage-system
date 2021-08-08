@@ -3,7 +3,7 @@ import { Container,Title,ShadowCard,Header,BackGround,LongBtn } from '../common-
 import { useCallback } from 'react'
 import { Link,useNavigate } from 'react-router-dom'
 import { useAuth } from '../../custom-hooks/use-auth'
-import useDocumentTitle from '../../custom-hooks/use-documentTitle'
+import useDocumentTitle from '../../custom-hooks/use-docoumentTitle'
 
 export default () => {
     useDocumentTitle('注册')

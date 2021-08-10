@@ -5,7 +5,7 @@ import React, { ReactNode, useState } from "react"
 import { useCallback } from "react"
 import { useEffect } from "react"
 
-//测试useReducer
+//一、测试useReducer(常见面试题，利用useReducer和useContext模拟redux)
 export default () => {
     UseDocumentTitle('测试页面')
     const [state,{
@@ -27,7 +27,9 @@ export default () => {
     </>
 }
 
-//抽取复用逻辑三种方法
+//二、抽取复用逻辑几种方法
+//0、早期使用的mixin已经被淘汰，一是因为mixin通过React.createClass()创建组件的方式已被废止，二是因为组件和mixin形成了强耦合的状态，会产生依赖，三是多个mixin可能存在相同命名的函数
+
 //1、React HOC
 //使用：withWindowWidth(<>xxx</>)
 //缺陷：高阶组件传入的props可能会覆盖原有组件的props
@@ -104,3 +106,36 @@ function UseWindowSize(){
     },[])
     return {windowSize,setWindowSize}
 }
+
+//三、为什么reducer是纯函数？为什么必须返回一个新的state？
+/**
+ * https://www.jianshu.com/p/e0d5cbd93ccc
+ */
+
+//四、为什么要使用redux-thunk?
+/**
+ * let dispatch = useDispatch()//最新的react-redux提供了useSelector和useDispatch，代替了老版本中connect高阶函数的写法
+ * 涉及到异步操作时，如果不用中间件，可以按照下面的写法：
+ * <form onSubmit={
+ *     e => {
+ *        e.preventDefault()
+ *        fetch(...)
+ *           .then(res => res.json())
+ *           .then(data => dispatch(createAction(data)))
+ *     }
+ * }/>
+ * 如果使用了redux-thunk后，可以按照下面的写法：
+ * const fn = () => {
+ *     return dispatch => { //redux-thunk会判断action是否为函数，是的话会传入dispatch参数
+ *        fetch(...)
+ *           .then(res => res.json())
+ *           .then(data => dispatch(createAction(data)))
+ *     }
+ * }
+ * <form onSubmit={ 
+ *     e => {
+ *        e.preventDefault()
+ *        dispatch(fn()) //我们在view这一层无需关心异步操作的细节  
+ *     }
+ * }/>
+ */

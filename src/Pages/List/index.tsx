@@ -11,7 +11,7 @@ import useAsync from '../../custom-hooks/use-async'
 import { deleteInvalidParams } from '../../util'
 import { useNavigate } from 'react-router-dom'
 import useDebounce from '../../custom-hooks/use-debounce'
-import useDocumentTitle from '../../custom-hooks/use-docoumentTitle'
+import useDocumentTitle from '../../custom-hooks/use-documentTitle'
 import useEditProject from '../../custom-hooks/use-editProject'
 
 export type User = {

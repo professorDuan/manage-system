@@ -1,4 +1,4 @@
-import UseDocumentTitle from "../../custom-hooks/use-docoumentTitle"
+import UseDocumentTitle from "../../custom-hooks/use-documentTitle"
 export default () => {
     UseDocumentTitle('404')
     return <>

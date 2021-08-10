@@ -4,6 +4,7 @@ import Detail from './Pages/List/Detail'
 import Login from './Pages/Login'
 import Register from './Pages/Register'
 import NotFound from './Pages/NotFound'
+import Test from './Pages/Test'
 import ErrorBoundary from './components/error-boundary'
 import FullPageError from './components/fullPage-error'
 
@@ -17,6 +18,7 @@ export default function App() {
          <Route path='/list/:id/*' element={<Detail/>}/>
          <Route path='/login' element={<Login/>}/>
          <Route path='/register' element={<Register/>}/>
+         <Route path='/test' element={<Test/>}/>
          {/* 当前路由下的/会重定向到/list */}
          <Navigate to='/list' />
          {/* 其他任何路径都会到404 */}

@@ -103,7 +103,7 @@ const reducer = function<T>(state:State<T>,action:{newData?:T,type:ActionType}){
                 future:future.slice(1)
             }
         case SET:
-            if (!action.newData) return state
+            if (action.newData === present) return state
             prev.push(present)
             return {
                 prev:[...prev],
@@ -111,7 +111,6 @@ const reducer = function<T>(state:State<T>,action:{newData?:T,type:ActionType}){
                 future:[]
             }
         case RESET:
-            if (!action.newData) return state
             return {
                 prev:[],
                 present:action.newData,
@@ -123,8 +122,8 @@ const reducer = function<T>(state:State<T>,action:{newData?:T,type:ActionType}){
 export default function<T>(initData:T){
     const [state,dispatch] = useReducer(reducer,{prev:[],present:initData,future:[]})//第二个参数是默认值
     const backward = useCallback(() => dispatch({type:BACKWARD}),[])
-    const forward = useCallback(() => dispatch({type:BACKWARD}),[])
+    const forward = useCallback(() => dispatch({type:FORWARD}),[])
     const set = useCallback((newData:T) => dispatch({newData,type:SET}),[])
     const reset = useCallback((newData:T) => dispatch({newData,type:RESET}),[])
-    return [state,{backward,forward,set,reset,canBackward:state.prev.length!==0,canForward:state.future.length!==0}] as const
+    return [state as State<T>,{backward,forward,set,reset,canBackward:state.prev.length!==0,canForward:state.future.length!==0}] as const
 }

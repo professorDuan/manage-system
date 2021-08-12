@@ -1,6 +1,9 @@
 import { Drawer } from 'antd'
-export default({open,setOpen}:{open:boolean,setOpen:(open:boolean)=>void}) => {
-    return <Drawer visible={open} onClose={()=>setOpen(false)} width={'100%'}>
+import useControlDialog from '../../custom-hooks/use-controlDialog'
+
+export default() => {
+    const { showing,close } = useControlDialog()
+    return <Drawer visible={showing} onClose={close} width={'100%'}>
         <h1>Project Modal</h1>
     </Drawer>
 }

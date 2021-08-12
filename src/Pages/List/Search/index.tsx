@@ -2,17 +2,17 @@ import {User} from '../index'
 import IdSelector from '../../../components/id-selector'
 import { Button, Form, Input } from 'antd'
 import { memo } from 'react'
+import useControlDialog from '../../../custom-hooks/use-controlDialog'
 
 type Params = {personId:number,name:string}
 interface DataFormat {
     params:Params
     setParams:(params:Params) => void
-    open:boolean
-    setOpen:(open:boolean)=>void
     users:User[]
 }
 
-export default memo(({params,users,setParams,setOpen}:DataFormat) => {
+export default memo(({params,users,setParams}:DataFormat) => {
+    const { open } = useControlDialog()
     return <Form labelCol={{ span: 20 }} wrapperCol={{ span: 20 }} layout='inline'>
        <Form.Item name='name' label="部门" style={{ width:"30%" }}>
           <Input placeholder="请输入部门名" value={params.name} onChange={e => setParams({...params,name:e.target.value})}/>
@@ -26,7 +26,7 @@ export default memo(({params,users,setParams,setOpen}:DataFormat) => {
           />
        </Form.Item>
        <Form.Item style={{ float:'right',marginLeft:'350px' }}>
-           <Button onClick={_=>setOpen(true)}>新增任务</Button>
+           <Button onClick={open}>新增任务</Button>
        </Form.Item>
     </Form>
 })

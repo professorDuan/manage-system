@@ -38,7 +38,6 @@ export default function(){
    const { mutate,data:editProject } = useEditProject()
    const [params,setParams] = useState({personId:0,name:''})
    const [users,setUsers] = useState<User[]>([])
-   const [open,setOpen] = useState(false)
    const http = useHttp()
    let {run,isLoading,data:projects,setSuccessState} = useAsync<Project[]>()
    useEffect(() => {
@@ -74,9 +73,9 @@ export default function(){
           </Dropdown>
       </Header>
       <Main>
-          <Search params={params} setParams={setParams} open={open} setOpen={setOpen} users={users}/>
+          <Search params={params} setParams={setParams} users={users}/>
           <Table mutate={mutate} loading={isLoading} users={users} pagination={false} bordered={true} dataSource={projects||[]}/>
       </Main>
-      <Dialog open={open} setOpen={setOpen}/>
+      <Dialog/>
    </Container>
 }

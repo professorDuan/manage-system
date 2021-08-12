@@ -1,5 +1,6 @@
 import { Popover,Typography,List, Divider, Button } from 'antd'
 import { Project } from '../../Pages/List'
+import useControlDialog from '../../custom-hooks/use-controlDialog'
 
 interface DataFormat{
     children:React.ReactNode
@@ -7,6 +8,7 @@ interface DataFormat{
 }
 
 export default ({children,projects}:DataFormat) => {
+    const { open } = useControlDialog()
     projects = projects.filter(project => project.pin)
     const content = <>
       <Typography.Text type={'secondary'}>我的收藏</Typography.Text>
@@ -16,7 +18,7 @@ export default ({children,projects}:DataFormat) => {
         </List.Item>)}
       </List>
       <Divider/>
-      <Button>创建项目</Button>
+      <Button onClick={ open }>创建项目</Button>
     </>
     return <Popover
        placement={'bottom'}

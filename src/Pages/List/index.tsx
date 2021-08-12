@@ -38,22 +38,18 @@ export default function(){
    const { mutate,data:editProject } = useEditProject()
    const [params,setParams] = useState({personId:0,name:''})
    const [users,setUsers] = useState<User[]>([])
-   const [open,setOpen] = useState(false)
    const http = useHttp()
    let {run,isLoading,data:projects,setSuccessState} = useAsync<Project[]>()
+
    useEffect(() => {
        http('users',{}).then(setUsers)
    },[])
+
    useEffect(() => {
        run(http('projects',{data:deleteInvalidParams(params)}))
    },[useDebounce(params)])
-   useEffect(() => { //模拟加上pin属性
-       projects?.forEach(project => {
-            if (typeof(project.pin)==='undefined') {
-                project.pin = false
-            } 
-       })
-   },[projects])
+
+   //初始情况下project没有pin字段，!undefined会变成true
    useEffect(() => {
        if (editProject && projects?.length) {
             const project = projects?.find(project => project.id===Number(editProject.id))
@@ -74,9 +70,9 @@ export default function(){
           </Dropdown>
       </Header>
       <Main>
-          <Search params={params} setParams={setParams} open={open} setOpen={setOpen} users={users}/>
+          <Search params={params} setParams={setParams} users={users}/>
           <Table mutate={mutate} loading={isLoading} users={users} pagination={false} bordered={true} dataSource={projects||[]}/>
       </Main>
-      <Dialog open={open} setOpen={setOpen}/>
+      <Dialog/>
    </Container>
 }

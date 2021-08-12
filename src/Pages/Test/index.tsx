@@ -107,15 +107,16 @@ function UseWindowSize(){
     return {windowSize,setWindowSize}
 }
 
-//三、为什么reducer是纯函数？为什么必须返回一个新的state？
+//三、为什么reducer是纯函数？
 /**
  * https://www.jianshu.com/p/e0d5cbd93ccc
+ * 无论是类组件还是函数组件或者在reducer中都不建议对原数据(非基本类型)直接修改后返回(例如arr.push()或者arr[index]=xx都不会生效)，因为是浅比较，页面不会更新，因此需要返回一个新的对象
  */
 
 //四、为什么要使用redux-thunk?
 /**
- * let dispatch = useDispatch()//最新的react-redux提供了useSelector和useDispatch，代替了老版本中connect高阶函数的写法
  * 涉及到异步操作时，如果不用中间件，可以按照下面的写法：
+ * let dispatch = useDispatch()//最新的react-redux提供了useSelector和useDispatch，代替了老版本中connect高阶函数的写法
  * <form onSubmit={
  *     e => {
  *        e.preventDefault()
@@ -138,4 +139,55 @@ function UseWindowSize(){
  *        dispatch(fn()) //我们在view这一层无需关心异步操作的细节  
  *     }
  * }/>
+ */
+
+/**
+ * 五、redux-toolkit:
+ * 该插件跟Context会冲突，因此切到新分支，该插件内置了redux-thunk、react-redux、immutable
+ * 1、在已有的react项目中，安装插件：
+ * yarn add react-redux @reduxjs/toolkit
+ * 2、创建store：
+ * import { configureStore } from '@reduxjs/toolkit'
+ * import counterSlice from xx
+ * import YYSlice from yy
+ * export State = ReturnType<typeof store.getState> //这里主要是针对在组件中使用时无法感知store中共享数据的类型
+ * export const store = configureStore({
+ *    reducer:{ //起到了combineReducers的作用
+ *      counter:counterSlice,
+ *      xx:xxSlice
+ *    }
+ * })
+ * 3、创建slice切片(每个reducer)：
+ * import { createSlice } from '@reduxjs/toolkit'
+ * export const counterSlice = createSlice({
+ *    name:'counter', //命名空间，防止actionType命名冲突
+ *    initialState:{count:0}, //初始值
+ *    reducers:{ //这里定义的属性会被自动导出为action，在组件中可以通过dispatch触发
+ *       increment(state,{payload}){ //内置了immutable，可以直接使用赋值的方式进行数据的改变，不需要每一次都返回一个新的state数据
+ *          state.count += payload
+ *       }
+ *    }
+ * })
+ * export const incrementByAsync = (count:number) => dispatch => setTimeout(() => dispatch(increment(count)),1000) //导出异步action，在组件中供dispatch调用
+ * export const { increment } = counterSlice.actions //导出同步action，在组件中供dispatch调用
+ * export default counterSlice.reducer //导出reducer供store使用
+ * 4、组件中使用：
+ * <Provider store={store}>
+ *    <App/>
+ * </Provider>
+ * import { useSelector, useDispatch } from 'react-redux'
+ * import { increment, } from 'counterSlice'
+ * import { State } from ...
+ * function App(){
+ *    const {count} = useSelector((state:State) => state.counter) //这里的counter对应store里reducer中的counter
+ *    const dispatch = useDispatch() //如果想让dispatch是一个Promise，需要写成const dispatch:(...args:unknown[])=>Promise<any> = useDispatch()
+ *    return <>
+ *       <button onClick={() => dispatch(increment(1))}>同步+</button>
+ *       <button onClick={() => dispatch(incrementByAsync(1))}>异步+</button>
+ *       <span>{count}</span>
+ *    </>
+ * }
+ * 5、创建异步action：
+ * 除了上述方法建立异步action外，redux-toolkit提供了createAsyncThunk方法，该方法被执行的时候会有三个(pending fulfilled rejected)状态，可以监听状态的改变执行不同的操作，放在slice的extraReducers属性中
+ * https://zhuanlan.zhihu.com/p/382487951
  */

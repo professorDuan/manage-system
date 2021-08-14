@@ -139,3 +139,12 @@ function UseWindowSize(){
  *     }
  * }/>
  */
+
+/**
+ * 五、react中共享数据的方法：
+ * 1、状态提升
+ * 2、Component Composition， 利用控制反转的思想在父级组件中完成组件的定义，然后逐层传递给子孙组件
+ * 3、context，跨越层级传递
+ * 4、react-query缓存思想，
+ * 5、redux，目前redux-toolkit是最流行的集成了redux-thunk、immutable、react-redux的redux库
+ */

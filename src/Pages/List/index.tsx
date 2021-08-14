@@ -13,6 +13,7 @@ import { useNavigate } from 'react-router-dom'
 import useDebounce from '../../custom-hooks/use-debounce'
 import useDocumentTitle from '../../custom-hooks/use-documentTitle'
 import useEditProject from '../../custom-hooks/use-editProject'
+import { useCallback } from 'react'
 
 export type User = {
     id:number
@@ -33,6 +34,7 @@ export default function(){
    if (!window.localStorage.getItem('token')) {
       navigate('/login?from=list')
    }
+
    useDocumentTitle('任务列表')
    const {name,logout} = useAuth()
    const { mutate,data:editProject } = useEditProject()
@@ -40,19 +42,30 @@ export default function(){
    const [users,setUsers] = useState<User[]>([])
    const http = useHttp()
    let {run,isLoading,data:projects,setSuccessState} = useAsync<Project[]>()
+
+   /**
+    * test--自定义类型保护/守卫
+    * TS中a变量类型未知时多使用unknown，但调用a.xx时即使加上?也会报错，此时可以使用下面的类型守卫的方式，在目标函数中判断变量的属性或者类型等等，然后返回时a is xx，当然a是any也可以这样判断
+    * 其他类型保护方式包括in typeof instanceof，无法处理unknown或者非字面量直接判断的情形，详见https://zhuanlan.zhihu.com/p/108856165
+    */
+   const isError = useCallback((val:any):val is Error => val?.message,[])
+   const ErrorBox = (error:unknown) => {
+       if (isError(error)) {
+           return <>{error.message}</>
+       }
+   }
+
+   //获取users
    useEffect(() => {
        http('users',{}).then(setUsers)
    },[])
+
+   //获取projects
    useEffect(() => {
        run(http('projects',{data:deleteInvalidParams(params)}))
    },[useDebounce(params)])
-   useEffect(() => { //模拟加上pin属性
-       projects?.forEach(project => {
-            if (typeof(project.pin)==='undefined') {
-                project.pin = false
-            } 
-       })
-   },[projects])
+
+   //模拟修改project的评分
    useEffect(() => {
        if (editProject && projects?.length) {
             const project = projects?.find(project => project.id===Number(editProject.id))

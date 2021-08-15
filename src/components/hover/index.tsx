@@ -8,7 +8,7 @@ interface DataFormat{
 }
 
 export default ({children,projects}:DataFormat) => {
-    const { open } = useControlDialog()
+    const { openAddProject } = useControlDialog()
     projects = projects.filter(project => project.pin)
     const content = <>
       <Typography.Text type={'secondary'}>我的收藏</Typography.Text>
@@ -18,7 +18,7 @@ export default ({children,projects}:DataFormat) => {
         </List.Item>)}
       </List>
       <Divider/>
-      <Button onClick={ open }>创建项目</Button>
+      <Button onClick={ openAddProject }>创建项目</Button>
     </>
     return <Popover
        placement={'bottom'}

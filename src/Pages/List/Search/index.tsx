@@ -12,10 +12,10 @@ interface DataFormat {
 }
 
 export default memo(({params,users,setParams}:DataFormat) => {
-    const { open } = useControlDialog()
+    const { openAddProject } = useControlDialog()
     return <Form labelCol={{ span: 20 }} wrapperCol={{ span: 20 }} layout='inline'>
        <Form.Item name='name' label="部门" style={{ width:"30%" }}>
-          <Input placeholder="请输入部门名" value={params.name} onChange={e => setParams({...params,name:e.target.value})}/>
+          <Input placeholder="请输入部门名" onChange={e => setParams({...params,name:e.target.value})}/>
        </Form.Item>
        <Form.Item name='id' label="负责人" style={{ width:"20%" }}>
           <IdSelector 
@@ -26,7 +26,7 @@ export default memo(({params,users,setParams}:DataFormat) => {
           />
        </Form.Item>
        <Form.Item style={{ float:'right',marginLeft:'350px' }}>
-           <Button onClick={open}>新增任务</Button>
+           <Button onClick={openAddProject}>新增任务</Button>
        </Form.Item>
     </Form>
 })

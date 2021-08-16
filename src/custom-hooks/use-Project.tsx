@@ -1,6 +1,6 @@
 import { Project } from "../Pages/List"
 import useHttp from "./use-http"
-import { useQuery,useMutation,QueryClient } from "react-query"
+import { useQuery,useMutation,useQueryClient } from "react-query"
 import { deleteInvalidParams } from "../util"
 
 //react-query中查询均使用useQuery钩子，第一个参数可以是string或者array（string是key，后面增删改都找这个key）
@@ -24,7 +24,7 @@ export const useQueryProjectById = (id?:number) => {
 
 //react-query中增删改使用useMutation钩子，第二个参数的onSuccess表示执行成功后需要更新缓存，这样数据才会刷新
 export const useEditProject = (id?:number,callback?:() => void) => {
-    const queryClient = new QueryClient
+    const queryClient = useQueryClient()
     const http = useHttp()
     const queryKey = ['projects',{id}]
     const editProject = (params:Partial<Project>) => http(`projects/${id||params.id}`,{data:params,method:'PATCH'})
@@ -38,7 +38,12 @@ export const useEditProject = (id?:number,callback?:() => void) => {
             const prevProjects = queryClient.getQueryData(queryKey)//拿到原始数据
             queryClient.setQueryData(//找到目标元素提前进行修改
                 queryKey,
-                (old:unknown) => (old as Project[])?.map((project) => project.id === target.id ? {...project,...target} : {...project})
+                (old:unknown) => {
+                    if (Array.isArray(old)) {
+                        return (old as Project[])?.map((project) => project.id === target.id ? {...project,...target} : {...project})
+                    }
+                    return old
+                }
             )
             return { prevProjects } //如果出错将数据传递给onError函数的第三个参数，方便回滚
         },
@@ -51,7 +56,7 @@ export const useEditProject = (id?:number,callback?:() => void) => {
 }
 
 export const useAddProject = (callback?:() => void) => {
-    const queryClient = new QueryClient
+    const queryClient = useQueryClient()
     const http = useHttp()
     const addProject = (params:Partial<Project>) => http('projects',{data:{created:Date.now(),pin:true,...params},method:'POST'})
     const { mutate,isLoading,data } = useMutation(addProject,{ 

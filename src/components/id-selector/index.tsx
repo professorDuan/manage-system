@@ -6,12 +6,13 @@ interface DataFormat extends Omit<React.ComponentProps<typeof Select>,'defaultVa
     defaultValue:string | number | null | undefined
     onSelect:(val?:number) => void
     options?:{name:string,id:number}[]
-    defaultOptionName?:string
+    defaultOptionName?:string,
+    defaultValueCanSelect?:boolean
 }
 
-export default ({defaultValue,options,defaultOptionName,onSelect}:DataFormat) => {
+export default ({defaultValue,defaultValueCanSelect=true,options,defaultOptionName,onSelect}:DataFormat) => {
     return <Select defaultValue={ toNumber(defaultValue) } onSelect={val => onSelect(toNumber(val))}>
-        { defaultOptionName && <Select.Option value={0}>{ defaultOptionName }</Select.Option> }
+        { defaultOptionName && defaultOptionName.length && <Select.Option key={Math.random()} disabled={!defaultValueCanSelect} value={0}>{ defaultOptionName }</Select.Option> }
         { options?.map(option => <Select.Option key={option.id} value={option.id}>{option.name}</Select.Option>) }
     </Select>
 }

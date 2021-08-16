@@ -142,12 +142,12 @@ function UseWindowSize(){
 
 /**
  * 五、react中共享数据的方法：
- * 1、状态提升
- * 2、Component Composition， 利用控制反转的思想在父级组件中完成组件的定义，然后逐层传递给子孙组件
- * 3、context，跨越层级传递，多用于客户端状态管理
- * 4、抽象一个custom hook，例如use-controlDialog和use-queryParams
+ * 1、状态提升(简单情况下)
+ * 2、Component Composition， 利用控制反转的思想在父级组件中完成组件的定义，然后逐层传递给子孙组件(简单情况下)
+ * 3、context，跨越层级传递，多用于客户端状态管理(小项目中)
+ * 4、redux，多用于客户端状态管理，目前redux-toolkit是最流行的集成了redux-thunk、immutable、react-redux的redux库，详见test/redux-toolkit分支
  * 5、react-query或者swr缓存思想，取代了手动封装的useAsync，一般用于处理服务端返回的数据在多个组件中共享的情况
  *   --https://developer.51cto.com/art/202102/646085.htm
  *   --https://zhuanlan.zhihu.com/p/265146038
- * 6、redux，多用于客户端状态管理，目前redux-toolkit是最流行的集成了redux-thunk、immutable、react-redux的redux库，详见test/redux-toolkit分支
+ * 6、利用url来管理，需要配合react-router-dom提供的useSearchParams钩子，将需要传递的参数放在url中，不同组件中可以拿到，详见use-controlDialog
  */

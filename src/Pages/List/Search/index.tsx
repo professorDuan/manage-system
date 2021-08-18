@@ -19,9 +19,8 @@ export default memo(({params,users,setParams}:DataFormat) => {
        </Form.Item>
        <Form.Item name='id' label="负责人" style={{ width:"20%" }}>
           <IdSelector 
-              defaultValue='0'
-              defaultOptionName='全部'
-              onSelect={ val => setParams({...params,personId:Number(val)}) }
+              defaultValue={'0'}
+              onSelect={ personId => setParams({...params,personId:Number(personId)}) }
               options={users}
           />
        </Form.Item>

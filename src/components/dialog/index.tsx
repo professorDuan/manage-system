@@ -11,7 +11,8 @@ export default({users}:{users:User[]}) => {
     //设置表单的初始值
     const [form] = Form.useForm<Pick<Project,'name'|'organization'|'personId'>>()
     if (project) {
-        form.setFieldsValue({name:project.name,organization:project.organization,personId:project.personId})
+        const { name,organization,personId } = project
+        form.setFieldsValue({name,organization,personId})
     }else {
         form.resetFields()
     }

@@ -66,7 +66,7 @@ export default function(){
 
    return <Container>
       <Header>
-          <Head projects={projects||[]}/>
+          <Head/>
           <Dropdown overlay={<Menu>
                  <Menu.Item key='logout' onClick={() => logout().then(_ => navigate('/login'))}>退出</Menu.Item>
               </Menu>}>

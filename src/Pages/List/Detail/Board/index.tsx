@@ -6,6 +6,7 @@ import useDocumentTitle from "../../../../custom-hooks/use-documentTitle"
 import useGetIdFromUrl from "../../../../custom-hooks/use-getIdFromUrl"
 import { useTasks } from '../../../../custom-hooks/use-tasks'
 import BoardItem from "./BoardItem"
+import CreateBoard from './Create-board'
 import SearchPanel from './Search-panel'
 
 export interface Board {
@@ -16,7 +17,13 @@ export interface Board {
 
 const Container = styled.div`
    display: flex;
-   overflow: hidden;
+   flex-direction: row;
+   flex: 1;
+   overflow-x: scroll;
+   overflow-y: hidden;
+   ::-webkit-scrollbar {
+       display: none;
+   }
 `
 
 export default () => {
@@ -35,13 +42,16 @@ export default () => {
       name:undefined
     }),[])
 
-    const { project,id } = useGetIdFromUrl() //拿到url中id对应的project
-    const {data:boards} = useBoards()
-    const {data:allTasks} = useTasks(useDebounce({...params,processorId:params.processorId ===0 ? undefined : params.processorId}))
+    const { project } = useGetIdFromUrl() //拿到url中id对应的project
+    const { data:boards } = useBoards()
+    const { data:allTasks } = useTasks(useDebounce({...params,processorId:params.processorId ===0 ? undefined : params.processorId}))
 
     return <>
       <h2>{project?.name}看板</h2>
       <SearchPanel params={params} setParams={setParams} reset={reset}/>
-      <Container>{ boards?.map((board,index) => <BoardItem key={index} board={board} allTasks={allTasks}/>) }</Container>
+      <Container>
+          { boards?.map((board,index) => <BoardItem key={index} board={board} allTasks={allTasks}/>) }
+          <CreateBoard/>
+      </Container>
     </>
 }

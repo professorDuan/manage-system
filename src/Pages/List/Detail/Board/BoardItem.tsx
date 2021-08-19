@@ -5,30 +5,28 @@ import bugIcon from '../../../../assets/bug.svg'
 import styled from "@emotion/styled"
 import { Card } from "antd"
 import { Task } from "../Task"
+import CreateTask from "../Task/Create-task"
 
 const TaskTypeIcon = ({id}:{id:number}) => {
     const { data:taskTypes } = useTaskTypes()
     const name = taskTypes?.find(item => item.id === id)?.name
     if (!name) return null
-    return <img style={{ width:'5%' }} src={name === 'task' ? taskIcon : bugIcon} />
+    return <img style={{ width:'8%' }} src={name === 'task' ? taskIcon : bugIcon} />
 }
 
 const Container = styled.div`
-    min-width: 27rem;
+    min-width: 20rem;
     border-radius: 6px;
     background-color: rgb(244,245,247);
     display: flex;
     flex-direction: column;
     padding: 0.7rem 0.7rem 1rem;
-    margin-right: 1.5rem;
+    margin-right: 0.5rem;
 `
 
 const TaskContainer = styled.div`
-    overflow: hidden;
+    overflow-y: scroll;
     flex: 1;
-    ::-webkit-scrollbar{
-        display: none;
-    }
 `
 
 export default ({board,allTasks}:{board:Board,allTasks:Task[]|undefined}) => {
@@ -44,6 +42,7 @@ export default ({board,allTasks}:{board:Board,allTasks:Task[]|undefined}) => {
                 </Card>
                 </>
             ) }
+            <CreateTask kanbanId={board.id}/>
        </TaskContainer>
     </Container>
 } 

@@ -1,7 +1,6 @@
 import { Button, Input, Select } from "antd"
 import { useQuery } from "react-query"
 import { User } from "../.."
-import IdSelector from "../../../../components/id-selector"
 import useHttp from "../../../../custom-hooks/use-http"
 import Row from "../../../common-style/row"
 

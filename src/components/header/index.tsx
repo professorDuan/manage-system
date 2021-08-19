@@ -1,5 +1,4 @@
 import { HeaderLeft } from "../../Pages/List/styles"
-import { Project } from "../../Pages/List"
 import Hover from "../hover"
 import { ReactComponent as Logo } from '../../assets/software-logo.svg'//以SVG标签展示一个SVG文件(直接import xx from会以图片形式渲染)
 

@@ -6,6 +6,8 @@ import styled from "@emotion/styled"
 import { Card } from "antd"
 import { Task } from "../Task"
 import CreateTask from "../Task/Create-task"
+import React from "react"
+import { Drag, DragChild, Drop, DropChild } from "../../../../components/drag-and-drop"
 
 const TaskTypeIcon = ({id}:{id:number}) => {
     const { data:taskTypes } = useTaskTypes()
@@ -29,20 +31,28 @@ const TaskContainer = styled.div`
     flex: 1;
 `
 
-export default ({board,allTasks}:{board:Board,allTasks:Task[]|undefined}) => {
-    //react-query很强大，如果在两秒内针对相同的queryKey有多个请求，那么只会发送一个
+//provided是cloneElement时传入的属性，不能写在forwardRef的第二个参数里，否则Drag调用时会报错 
+export default (({board,allTasks}:{board:Board,allTasks:Task[]}) => {
     const tasks = allTasks?.filter(task => task.kanbanId === board.id)
     return <Container>
        <h3>{ board.name }</h3>
        <TaskContainer>
-            { tasks?.map(task => <>
-                <Card key={task.id} style={{ marginBottom:'0.5rem' }}>
-                        <div>{task.name}</div>
-                        <TaskTypeIcon id={task.typeId} />
-                </Card>
-                </>
-            ) }
+            <Drop type='TASK' direction='vertical' droppableId={String(board.id)}>
+                <DropChild>
+                    { tasks?.map((task,index) => (
+                          <Drag key={task.id} index={index} draggableId={'task'+task.id}>
+                              <DragChild>
+                                <Card style={{ marginBottom:'0.5rem' }}>
+                                    <div>{task.name}</div>
+                                    <TaskTypeIcon id={task.typeId} />
+                                </Card>
+                              </DragChild>
+                          </Drag>
+                        )
+                    ) }
+                </DropChild>
+            </Drop>
             <CreateTask kanbanId={board.id}/>
        </TaskContainer>
     </Container>
-} 
+} )

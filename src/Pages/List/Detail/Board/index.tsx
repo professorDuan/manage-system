@@ -1,6 +1,8 @@
 import styled from '@emotion/styled'
 import { useCallback, useState } from 'react'
-import { useBoards } from '../../../../custom-hooks/use-boards'
+import { DragDropContext } from 'react-beautiful-dnd'
+import { Drag, DragChild, Drop, DropChild } from '../../../../components/drag-and-drop'
+import { useBoards,useDragEndHandler } from '../../../../custom-hooks/use-boards'
 import useDebounce from '../../../../custom-hooks/use-debounce'
 import useDocumentTitle from "../../../../custom-hooks/use-documentTitle"
 import useGetIdFromUrl from "../../../../custom-hooks/use-getIdFromUrl"
@@ -15,7 +17,7 @@ export interface Board {
     projectId: number
 }
 
-const Container = styled.div`
+const Container = styled(DropChild)`
    display: flex;
    flex-direction: row;
    flex: 1;
@@ -46,12 +48,23 @@ export default () => {
     const { data:boards } = useBoards()
     const { data:allTasks } = useTasks(useDebounce({...params,processorId:params.processorId ===0 ? undefined : params.processorId}))
 
-    return <>
+    const dragEndHandler = useDragEndHandler()
+
+    //拖拽完成后默认会恢复原样，想保持状态需要在onDragEnd中存到数据库
+    return <DragDropContext onDragEnd={dragEndHandler}>
       <h2>{project?.name}看板</h2>
       <SearchPanel params={params} setParams={setParams} reset={reset}/>
-      <Container>
-          { boards?.map((board,index) => <BoardItem key={index} board={board} allTasks={allTasks}/>) }
-          <CreateBoard/>
-      </Container>
-    </>
+          <Drop type='BOARD' direction='horizontal' droppableId='board '>
+            <Container>
+              { boards?.map((board,index) => (
+                  <Drag key={board.id} index={index} draggableId={'board'+index}>
+                      <DragChild>
+                         <BoardItem board={board} allTasks={allTasks||[]}/>
+                      </DragChild>
+                  </Drag>
+              )) }
+              <CreateBoard/>
+            </Container>
+          </Drop>
+    </DragDropContext>
 }

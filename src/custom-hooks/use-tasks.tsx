@@ -26,3 +26,22 @@ export const useAddTask = () => {
     })
     return { mutate,task }
 }
+
+//保存任务拖拽后的结果
+export const useSaveTask = () => {
+    const queryClient = useQueryClient()
+    const http = useHttp()
+    const saveTask = (params:{
+        fromId:number
+        referenceId:number
+        type:'before'|'after'
+        fromKanbanId?:number
+        toKanbanId?:number
+    }) =>  http('tasks/reorder',{data:params,method:'post'})
+    const { mutate } = useMutation(saveTask,{
+        onSuccess(){
+            queryClient.invalidateQueries('tasks')
+        }
+    })
+    return { mutate }
+}

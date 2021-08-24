@@ -46,6 +46,7 @@ export const useDragEndHandler = () => {
     const { data:tasks } = useTasks()
     const { mutate:saveBoard } = useSaveBoard()
     const { mutate:saveTask } = useSaveTask()
+    //source:{droppableId:number,index:number},droppableId是定义Droppable是赋予的，index是该拖拽项在Droppable中的索引
     const dragEndHandler = ({ source,destination,type }:DropResult) => {
         if (!destination || !source) return
         //处理看板拖动

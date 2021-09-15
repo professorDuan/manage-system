@@ -1,6 +1,4 @@
-import { UseAuth } from './use-auth'
 import qs from 'qs'
-
 interface fetchConfig extends RequestInit {
     token:string
     data:object
